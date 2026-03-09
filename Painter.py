@@ -4,13 +4,15 @@ from Function import Function
 
 
 class Painter:
-    def __init__(self, picture_path: str, delta: float):
-        self._picture_path = picture_path
+    def __init__(self, f: Function, delta: float):
         self._delta = delta
-    
+        self._f = f
+        self._fig, self._ax = plt.subplots()
+        plt.axis('equal')
+        plt.grid()
 
-    def _draw_points(self, x: Sequence, y: Sequence, f: Function) -> None:
-        z = f.solve_in_ranges((x, y), self._delta)
+    def _draw_points(self) -> None:
+        z = self._f.solve_in_ranges(self._delta)
 
         fig, ax = plt.subplots()
         plt.axis('equal')
@@ -18,29 +20,25 @@ class Painter:
 
         linetype = '.'
 
-        for i in range(len(y) - 1):
-            for j in range(len(x) - 1):
+        for i in range(len(self._f._y) - 1):
+            for j in range(len(self._f._x) - 1):
                 if abs(z[i][j]) < self._delta:
-                    ax.plot(x[j], y[i], linetype)
+                    ax.plot(self._f._x[j], self._f._y[i], linetype)
                 if abs(z[i][j + 1]) < self._delta:
-                    ax.plot(x[j+1], y[i], linetype)
+                    ax.plot(self._f._x[j+1], self._f._y[i], linetype)
                 if (abs(z[i + 1][j + 1]) < self._delta):
-                    ax.plot(x[j+1], y[i+1], linetype)
+                    ax.plot(self._f._x[j+1], self._f._y[i+1], linetype)
                 if (abs(z[i + 1][j]) < self._delta):
-                    ax.plot(x[j], y[i+1], linetype)
+                    ax.plot(self._f._x[j], self._f._y[i+1], linetype)
         plt.savefig("points.png")
 
 
 
-    def draw(self, x: Sequence, y: Sequence, f: Function, line_color: str = 'blue') -> None:
-        z = f.solve_in_ranges((x, y), self._delta)
+    def draw(self, line_color: str = 'blue', parametrs: dict = {}) -> None:
+        z = self._f.solve_in_ranges(self._delta, parametrs)
 
-        fig, ax = plt.subplots()
-        plt.axis('equal')
-        plt.grid()
-
-        for i in range(len(y) - 1):
-            for j in range(len(x) - 1):
+        for i in range(len(self._f._y) - 1):
+            for j in range(len(self._f._x) - 1):
                 pd = (abs(z[i][j]) < self._delta)
                 pc = (abs(z[i][j + 1]) < self._delta)
                 pb = (abs(z[i + 1][j + 1]) < self._delta)
@@ -49,44 +47,48 @@ class Painter:
 
                 sqrt_code = pa * 8 + pb * 4 + pc * 2 + pd * 1
 
-                ca = (x[j] + self._delta / 2, y[i + 1])
-                cb = (x[j+1], y[i] + self._delta / 2)
-                cc = (x[j] + self._delta / 2, y[i])
-                cd = (x[j], y[i] + self._delta / 2)
+                ca = (self._f._x[j] + self._delta / 2, self._f._y[i + 1])
+                cb = (self._f._x[j+1], self._f._y[i] + self._delta / 2)
+                cc = (self._f._x[j] + self._delta / 2, self._f._y[i])
+                cd = (self._f._x[j], self._f._y[i] + self._delta / 2)
                 
 
 
                 match sqrt_code:
                     case 1:
-                        ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
                     case 2:
-                        ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 3:
-                        ax.plot([cb[0], cd[0]], [cb[1], cd[1]], line_color)
+                        self._ax.plot([cb[0], cd[0]], [cb[1], cd[1]], line_color)
                     case 4:
-                        ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
                     case 5:
-                        ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
-                        ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 6:
-                        ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
+                        self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
                     case 7:
-                        ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
                     case 8:
-                        ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
                     case 9:
-                        ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
+                        self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
                     case 10:
-                        ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
-                        ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
                     case 11:
-                        ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
                     case 12:
-                        ax.plot([cb[0], cd[0]], [cb[1], cd[1]], line_color)
+                        self._ax.plot([cb[0], cd[0]], [cb[1], cd[1]], line_color)
                     case 13:
-                        ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 14:
-                        ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
                 
-        plt.savefig(self._picture_path)
-        
+    def savefig(self, path: str) -> None:
+        plt.savefig(path)
+
+    def draw_multiple(self, parametr: str, colors: list[str], p_range: list) -> None:
+        for c in range(len(p_range)):
+            self.draw(colors[c], {parametr: p_range[c]})

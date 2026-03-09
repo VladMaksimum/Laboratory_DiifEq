@@ -4,27 +4,32 @@ import numpy as np
 Numeric = int | float
 
 class Function:
-    def __init__(self, left: str, right: str, variables: tuple[str, str], simple_functions: dict[str, Callable]) -> None:
+    def __init__(self, left: str, right: str, variables: tuple[str, str], simple_functions: dict[str, Callable],\
+                 x: Sequence, y: Sequence) -> None:
         self._expr = f'{left} - {right}'
         self._vars = variables
         self._funcs = simple_functions
+        self._x = x
+        self._y = y
 
-    def solve_in_point(self, x: float | Iterable[Iterable], y: float | Iterable[Iterable]) -> float | Iterable[Iterable]:
+    def solve_in_point(self, x: Sequence[Sequence], y: Sequence[Sequence],parametrs: dict = {}) -> float | Iterable[Iterable]:
         var1 = self._vars[0]
         var2 = self._vars[1]
 
-        return eval(self._expr, {}, {var1: x, var2: y, **self._funcs})
+        return eval(self._expr, {}, {var1: x, var2: y, **self._funcs, **parametrs})
     
-    def solve_in_ranges(self, ranges: Sequence[Sequence], delta: float) -> Sequence[Sequence]:
-        X, Y = np.meshgrid(ranges[0], ranges[1])
+    def solve_in_ranges(self, delta: float, parametrs: dict = {}) -> Sequence[Sequence]:
+        X, Y = np.meshgrid(self._x, self._y)
 
-        z = self.solve_in_point(X, Y)
+        z = self.solve_in_point(X, Y, parametrs)
 
+        '''
         with open("data.txt", 'w') as file:
-            for i in range(len(ranges[0])):
-                for j in range(len(ranges[1])):
-                    if abs(z[j][i]) < delta and abs(ranges[0][i]) < 0.25 and abs(ranges[1][j]) < 0.25:
-                        file.write(f'{ranges[0][i]} {ranges[1][j]} {z[j][i]}\n')
+            for i in range(len(self._x)):
+                for j in range(len(self._y)):
+                    if abs(z[j][i]) < delta and abs(self._x[i]) < 0.25 and abs(self._y[j]) < 0.25:
+                        file.write(f'{self._x[i]} {self._x[j]} {z[j][i]}\n')
+        '''
 
         return z
 
