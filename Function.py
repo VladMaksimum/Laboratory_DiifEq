@@ -23,7 +23,7 @@ class Function:
         with open("data.txt", 'w') as file:
             for i in range(len(ranges[0])):
                 for j in range(len(ranges[1])):
-                    if z[j][i] < delta and ranges[0][i] < 2*delta and ranges[1][j] < 2*delta:
+                    if abs(z[j][i]) < delta and abs(ranges[0][i]) < 0.25 and abs(ranges[1][j]) < 0.25:
                         file.write(f'{ranges[0][i]} {ranges[1][j]} {z[j][i]}\n')
 
         return z

@@ -13,5 +13,7 @@ funcs ={
     'sin' : np.sin,
     'cos' : np.cos,
     'tg' : np.tan,
-    'ln' : ln
+    'ln' : ln,
+    'exp' : np.e,
+    'pi' : np.pi
 }
