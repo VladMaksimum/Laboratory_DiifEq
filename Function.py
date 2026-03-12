@@ -6,7 +6,7 @@ Numeric = int | float
 class Function:
     def __init__(self, left: str, right: str, variables: tuple[str, str], simple_functions: dict[str, Callable],\
                  x: Sequence, y: Sequence) -> None:
-        self._expr = f'{left} - {right}'
+        self._expr = f'{left} - ({right})'
         self._vars = variables
         self._funcs = simple_functions
         self._x = x
@@ -18,7 +18,7 @@ class Function:
 
         return eval(self._expr, {}, {var1: x, var2: y, **self._funcs, **parametrs})
     
-    def solve_in_ranges(self, delta: float, parametrs: dict = {}) -> Sequence[Sequence]:
+    def solve_in_ranges(self, parametrs: dict = {}) -> Sequence[Sequence]:
         X, Y = np.meshgrid(self._x, self._y)
 
         z = self.solve_in_point(X, Y, parametrs)

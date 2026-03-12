@@ -14,6 +14,6 @@ funcs ={
     'cos' : np.cos,
     'tg' : np.tan,
     'ln' : ln,
-    'exp' : np.e,
+    'exp' : np.exp,
     'pi' : np.pi
 }

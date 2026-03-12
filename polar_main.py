@@ -1,5 +1,5 @@
-from Function import Function
-from Painter import Painter
+from Polar_fucntion import PolarFunction
+from Polar_painter import PolarPainter
 from Operations import funcs
 import numpy as np
 
@@ -14,8 +14,8 @@ y_s, y_e = -5, 5
 x = np.arange(x_s, x_e, delta)
 y = np.arange(y_s, y_e, delta)
 
-f = Function(left, right, ('y', 'z'), funcs, x, y)
-p = Painter(f, delta)
+f = PolarFunction(left, right, ('r', 'phi'), funcs, x, y)
+p = PolarPainter(f, delta)
 
 #p._draw_points(x, y, f)
 
@@ -23,7 +23,7 @@ p = Painter(f, delta)
 #step = int(input("Input step: "))
 
 p.draw()
-p.savefig(f'{base_pict_path}test.png')
+p.savefig(f'{base_pict_path}polar_test.png')
 
 
 #p.draw_multiple("c", ['blue', 'red', 'green'], [1, 2,  3])
