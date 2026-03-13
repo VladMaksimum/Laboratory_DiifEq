@@ -7,25 +7,42 @@ expr = input("Input expression:\n")
 left, right = expr.split("=")
 
 base_pict_path = 'pictures/'
-delta = 0.01
-x_s, x_e = -5, 5
-y_s, y_e = -5, 5
+step = 0.01
+buffer = 0.001
+x_s, x_e = -2, 2
+y_s, y_e = -2, 2
 
-x = np.arange(x_s, x_e, delta)
-y = np.arange(y_s, y_e, delta)
+x1 = np.arange(buffer, x_e, step)
+x2 = np.arange(x_s, -buffer, step)
+y1 = np.arange(buffer, y_e, step)
+y2 = np.arange(y_s, -buffer, step)
 
+ys = [y1, y2]
+xs = [x1, x2]
+'''
 f = Function(left, right, ('y', 'z'), funcs, x, y)
-p = Painter(f, delta)
+p = Painter(f, step)
 
 #p._draw_points(x, y, f)
 
 #start, end = map(int, input("Input range: ").split())
 #step = int(input("Input step: "))
 
-p.draw()
-p.savefig(f'{base_pict_path}test.png')
+#p.draw()
+#p.savefig(f'{base_pict_path}test.png')
 
 
-#p.draw_multiple("c", ['blue', 'red', 'green'], [1, 2,  3])
+p.draw_multiple("k", ['blue' for _ in range(-6, 6)], range(-6, 6))
 
-#p.savefig(f'{base_pict_path}multi_pict.png')
+p.savefig(f'{base_pict_path}multi_pict.png')
+'''
+p = Painter(None, step)
+
+for p1 in range(2):
+    for p2 in range(2):
+        f = Function(left, right, ('y', 'z'), funcs, xs[p1], ys[p2])
+        p._f = f
+
+        p.draw_multiple("k", ['blue' for _ in range(-6, 6)], range(-6, 6))
+
+p.savefig(f'{base_pict_path}multi_pict.png')

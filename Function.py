@@ -23,13 +23,13 @@ class Function:
 
         z = self.solve_in_point(X, Y, parametrs)
 
-        '''
+        
         with open("data.txt", 'w') as file:
-            for i in range(len(self._x)):
-                for j in range(len(self._y)):
-                    if abs(z[j][i]) < delta and abs(self._x[i]) < 0.25 and abs(self._y[j]) < 0.25:
-                        file.write(f'{self._x[i]} {self._x[j]} {z[j][i]}\n')
-        '''
+            for i in range(1, len(self._x)-1):
+                for j in range(1, len(self._y)-1):
+                    if abs(self._x[i]) < 0.01:
+                        file.write(f'{z[j][i-1]} {z[j][i]} {z[j][i+1]} {self._x[i]=} {self._y[j]}\n')
+        
 
         return z
 

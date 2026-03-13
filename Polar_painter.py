@@ -24,10 +24,10 @@ class PolarPainter:
 
         for i in range(len(self._f._phi) - 1):
             for j in range(len(self._f._r) - 1):
-                pd = (abs(z[i][j]) < self._delta)
-                pc = (abs(z[i][j + 1]) < self._delta)
-                pb = (abs(z[i + 1][j + 1]) < self._delta)
-                pa = (abs(z[i + 1][j]) < self._delta)
+                pd = z[i][j] >= 0
+                pc = z[i][j + 1] >= 0
+                pb = z[i + 1][j + 1] >= 0
+                pa = z[i + 1][j] >= 0
 
 
                 sqrt_code = pa * 8 + pb * 4 + pc * 2 + pd * 1
@@ -36,7 +36,7 @@ class PolarPainter:
                 cb = to_cartesian(self._f._r[j+1], self._f._phi[i] + self._delta / 2)
                 cc = to_cartesian(self._f._r[j] + self._delta / 2, self._f._phi[i])
                 cd = to_cartesian(self._f._r[j], self._f._phi[i] + self._delta / 2)
-                
+                co = to_cartesian(self._f._r[j] + self._delta / 2, self._f._phi[i] + self._delta / 2)
 
 
                 match sqrt_code:
@@ -49,8 +49,12 @@ class PolarPainter:
                     case 4:
                         self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
                     case 5:
-                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
-                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        if z[co[1]][co[0]] <= 0:
+                            self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                            self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        else:
+                            self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                            self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 6:
                         self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
                     case 7:
@@ -60,8 +64,12 @@ class PolarPainter:
                     case 9:
                         self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
                     case 10:
-                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
-                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        if z[co[1]][co[0]] <= 0:
+                            self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                            self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        else:
+                            self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                            self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 11:
                         self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
                     case 12:

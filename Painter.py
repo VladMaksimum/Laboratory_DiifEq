@@ -32,17 +32,29 @@ class Painter:
                     ax.plot(self._f._x[j], self._f._y[i+1], linetype)
         plt.savefig("points.png")
 
+    def draw_simple(self, parametrs: dict = {}):
+        z = self._f.solve_in_ranges(parametrs)
+
+        for i in range(len(self._f._y) - 1):
+            for j in range(len(self._f._x) - 1):
+                if abs(z[i][j]) < self._delta and abs(z[i][j+1]) < self._delta:
+                    self._ax.plot([self._f._x[j], self._f._x[j+1]], [self._f._y[i], self._f._y[i]]) 
+                if abs(z[i][j]) < self._delta and abs(z[i+1][j]) < self._delta:
+                    self._ax.plot([self._f._x[j], self._f._x[j]], [self._f._y[i], self._f._y[i+1]])
+                if abs(z[i][j]) < self._delta and abs(z[i+1][j+1]) < self._delta:
+                    self._ax.plot([self._f._x[j], self._f._x[j+1]], [self._f._y[i], self._f._y[i+1]])
+    
 
 
     def draw(self, line_color: str = 'blue', parametrs: dict = {}) -> None:
         z = self._f.solve_in_ranges(parametrs)
 
         for i in range(len(self._f._y) - 1):
-            for j in range(len(self._f._x) - 1):
-                pd = (abs(z[i][j]) < self._delta)
-                pc = (abs(z[i][j + 1]) < self._delta)
-                pb = (abs(z[i + 1][j + 1]) < self._delta)
-                pa = (abs(z[i + 1][j]) < self._delta)
+            for j in range(len(self._f._x) - 1): 
+                pd = z[i][j] >= 0
+                pc = z[i][j + 1] >= 0
+                pb = z[i + 1][j + 1] >= 0
+                pa = z[i + 1][j] >= 0
 
 
                 sqrt_code = pa * 8 + pb * 4 + pc * 2 + pd * 1
@@ -51,7 +63,7 @@ class Painter:
                 cb = (self._f._x[j+1], self._f._y[i] + self._delta / 2)
                 cc = (self._f._x[j] + self._delta / 2, self._f._y[i])
                 cd = (self._f._x[j], self._f._y[i] + self._delta / 2)
-                
+                co = (self._f._x[j] + self._delta / 2, self._f._y[i] + self._delta / 2)
 
 
                 match sqrt_code:
@@ -64,8 +76,12 @@ class Painter:
                     case 4:
                         self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
                     case 5:
-                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
-                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        if z[co[1]][co[0]] <= 0:
+                            self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                            self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        else:
+                            self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                            self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 6:
                         self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
                     case 7:
@@ -75,8 +91,12 @@ class Painter:
                     case 9:
                         self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
                     case 10:
-                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
-                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        if z[co[1]][co[0]] <= 0:
+                            self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                            self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        else:
+                            self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                            self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 11:
                         self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
                     case 12:

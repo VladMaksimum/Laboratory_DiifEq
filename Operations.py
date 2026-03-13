@@ -4,7 +4,6 @@ Numeric = int | float
 def ln(x: Numeric) -> Numeric:
     return np.log1p(x - 1)
 
-
 funcs ={
     'arctg' : np.atan,
     'arccos' :np.acos,
