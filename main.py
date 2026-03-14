@@ -1,48 +1,26 @@
-from Function import Function
-from Painter import Painter
-from Operations import funcs
-import numpy as np
-
-expr = input("Input expression:\n")
-left, right = expr.split("=")
-
-base_pict_path = 'pictures/'
-step = 0.01
-buffer = 0.001
-x_s, x_e = -2, 2
-y_s, y_e = -2, 2
-
-x1 = np.arange(buffer, x_e, step)
-x2 = np.arange(x_s, -buffer, step)
-y1 = np.arange(buffer, y_e, step)
-y2 = np.arange(y_s, -buffer, step)
-
-ys = [y1, y2]
-xs = [x1, x2]
-'''
-f = Function(left, right, ('y', 'z'), funcs, x, y)
-p = Painter(f, step)
-
-#p._draw_points(x, y, f)
-
-#start, end = map(int, input("Input range: ").split())
-#step = int(input("Input step: "))
-
-#p.draw()
-#p.savefig(f'{base_pict_path}test.png')
+from Interface import Interface
 
 
-p.draw_multiple("k", ['blue' for _ in range(-6, 6)], range(-6, 6))
+interface = Interface()
 
-p.savefig(f'{base_pict_path}multi_pict.png')
-'''
-p = Painter(None, step)
+try:
+    system = int(input("Hello. Choose coordinate system:\n" \
+                    "1. Cartesian\n" \
+                    "2. Polar\n" \
+                    "Your choice: "))
+except:
+    raise Exception("Wrong input. Input only number")
 
-for p1 in range(2):
-    for p2 in range(2):
-        f = Function(left, right, ('y', 'z'), funcs, xs[p1], ys[p2])
-        p._f = f
 
-        p.draw_multiple("k", ['blue' for _ in range(-6, 6)], range(-6, 6))
+if system == 1:
+    interface.draw_cartesian(input("Input file: "))
+elif system == 2:
+    interface.draw_polar(input("Input file: "))
 
-p.savefig(f'{base_pict_path}multi_pict.png')
+print("Goodbye")
+
+
+
+
+# r = c * sqrt(exp(arctg(2*tg(phi)) + pi*k) / (1 + 3*(sin(phi))**2))
+# ln((x**2 + 4*y**2) / (c**2)) = arctg(2*y / x) + pi*k

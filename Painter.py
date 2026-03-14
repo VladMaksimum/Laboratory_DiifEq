@@ -109,6 +109,6 @@ class Painter:
     def savefig(self, path: str) -> None:
         plt.savefig(path)
 
-    def draw_multiple(self, parametr: str, colors: list[str], p_range: list) -> None:
+    def draw_multiple(self, parametr: list, colors: list[str], p_range: list) -> None:
         for c in range(len(p_range)):
             self.draw(colors[c], {parametr: p_range[c]})
