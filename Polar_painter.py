@@ -14,12 +14,13 @@ class PolarPainter:
     def __init__(self, f: PolarFunction, delta: float):
         self._delta = delta
         self._f = f
-        self._fig, self._ax = plt.subplots()
-        plt.axis('equal')
-        plt.grid()
+        self._ax = plt.axes(projection='polar')
+        self._ax.set_yticklabels([]) # Убирает значения радиуса (0.2, 0.4...)
+        #plt.axis('equal')
+        #plt.grid()
 
 
-    def draw(self, line_color: str = 'blue', parametrs: dict = {}) -> None:
+    def draw_implicit(self, line_color: str = 'blue', parametrs: dict = {}) -> None:
         z = self._f.solve_in_ranges(parametrs)
 
         for i in range(len(self._f._phi) - 1):
@@ -78,10 +79,33 @@ class PolarPainter:
                         self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
                     case 14:
                         self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+    
+    def _draw_explicit(self, line_color: str = 'blue', parametrs: dict = {}):
+        z = self._f.solve_explicit(self._f._phi, parametrs)
+
+        if 'c' in parametrs.keys():
+            c = parametrs['c']
+        else:
+            c = 0
+
+        plt.polar(self._f._phi, z, line_color, label=f'c={c}')
+    
+    def draw_explicit(self, line_color: str = 'blue', parametrs: dict = {}):
+        buffer = 0.001
+        phi1 = np.arange(-np.pi / 2 + buffer, np.pi / 2 - buffer, 0.01)
+        phi2 = np.arange(np.pi / 2 + buffer, 3*np.pi / 2 - buffer, 0.01)
+
+
+        for k in range(-6, 6):
+            self._f._phi = phi1
+            self._draw_explicit(line_color, parametrs={'k':k, **parametrs})
+            self._f._phi = phi2
+            self._draw_explicit(line_color, parametrs={'k':k, **parametrs})
+
                 
     def savefig(self, path: str) -> None:
         plt.savefig(path)
 
     def draw_multiple(self, parametr: str, colors: list[str], p_range: list) -> None:
         for c in range(len(p_range)):
-            self.draw(colors[c], {parametr: p_range[c]})
+            self.draw_explicit(colors[c], {parametr: p_range[c]})

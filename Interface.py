@@ -55,28 +55,17 @@ class Interface:
             consts = [int(consts)]
 
         base_pict_path = 'pictures/'
-        step = 0.01
+
+        r = np.arange(-1, 1, 0.01)
         buffer = 0.001
-
-        r_s, r_e = map(int, input("Input r range: ").split())
-
-        phi1 = np.arange(-np.pi / 2 + buffer, np.pi / 2 - buffer, step)
-        phi2 = np.arange(np.pi / 2 + buffer, 3*np.pi / 2 - buffer, step)
-        r = np.arange(r_s, r_e, step)
+        phi1 = np.arange(-np.pi / 2 + buffer, np.pi / 2 - buffer, 0.01)
+        phi2 = np.arange(np.pi / 2 + buffer, 3*np.pi / 2 - buffer, 0.01)
 
         f = PolarFunction(left, right, ('r', 'phi'), funcs, r, phi1)
-        p = PolarPainter(f, step)
+        p = PolarPainter(f, 0.01)
 
-        colors = ['blue', 'red', 'green']
-
-        for k in range(-6, 6):
-            for i, c in enumerate(consts):
-                p.draw(line_color=colors[i%3], parametrs={'k': k, 'c': c})
-
-        p._f._phi = phi2
-        for k in range(-6, 6):
-            for i, c in enumerate(consts):
-                p.draw(line_color=colors[i%3], parametrs={'k': k, 'c': c})
+        for c in consts:
+            p.draw_explicit(parametrs={'c':c})
 
         p.savefig(f'{base_pict_path}{save_file}')
     

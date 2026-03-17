@@ -6,6 +6,7 @@ class PolarFunction:
     def __init__(self, left: str, right: str, variables: tuple[str, str], simple_functions: dict[str, Callable],\
                 r: Sequence, phi: Sequence) -> None:
         self._expr = f'{left} - ({right})'
+        self._right = right
         self._vars = variables
         self._funcs = simple_functions
         self._r = r
@@ -16,6 +17,15 @@ class PolarFunction:
         var2 = self._vars[1]
 
         return eval(self._expr, {}, {var1: r, var2: phi, **self._funcs, **parametrs})
+    
+    def solve_explicit(self, phi: Sequence[Sequence],parametrs: dict = {}):
+        res = np.zeros(len(phi))
+
+        for i in range(len(phi)):
+            if not abs(np.cos(phi[i])) < 10**(-6):
+                res[i] = eval(self._right, {}, {self._vars[1]: phi[i], **self._funcs, **parametrs})
+        
+        return res
     
     def solve_in_ranges(self, parametrs: dict = {}) -> Sequence[Sequence]:
         R, PHI = np.meshgrid(self._r, self._phi)
