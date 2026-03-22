@@ -15,7 +15,9 @@ class PolarPainter:
         self._delta = delta
         self._f = f
         self._ax = plt.axes(projection='polar')
-        self._ax.set_yticklabels([]) # Убирает значения радиуса (0.2, 0.4...)
+        # self._ax.set_yticklabels([])
+        self._ax.set_ylim(f._r[0], f._r[-1])
+        self._ax.set_aspect('equal')
         #plt.axis('equal')
         #plt.grid()
 
@@ -102,6 +104,10 @@ class PolarPainter:
             self._f._phi = phi2
             self._draw_explicit(line_color, parametrs={'k':k, **parametrs})
 
+    def draw_line(self, phi: float, line_color = 'blue'):
+        for i in range(len(self._f._r) - 1):
+            plt.polar([phi, phi], [self._f._r[i], self._f._r[i+1]], line_color)
+            plt.polar([phi + np.pi, phi + np.pi], [self._f._r[i], self._f._r[i+1]], line_color)
                 
     def savefig(self, path: str) -> None:
         plt.savefig(path)

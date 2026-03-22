@@ -18,17 +18,18 @@ class Interface:
             consts = [int(consts)]
 
         base_pict_path = 'pictures/'
-        step = 0.01
+        step = 0.001
         buffer = 0.001
 
-        x_s, x_e = map(int, input("Input x range: ").split())
-        y_s, y_e = map(int, input("Input y range: ").split())
+        x_s, x_e = map(float, input("Input x range: ").split())
+        y_s, y_e = map(float, input("Input y range: ").split())
 
-        x1 = np.arange((x_e + x_s) / 2 + buffer, x_e, step)
-        x2 = np.arange(x_s, (x_e + x_s) / 2 - buffer, step)
+        #x1 = np.arange((x_e + x_s) / 2 + buffer, x_e, step)
+        #x2 = np.arange(x_s, (x_e + x_s) / 2 - buffer, step)
         y = np.arange(y_s, y_e, step)
+        x = np.arange(x_s, x_e, step)
 
-        f = Function(left, right, ('x', 'y'), funcs, x1, y)
+        f = Function(left, right, ('x', 'y'), funcs, x, y)
         p = Painter(f, step)
 
         colors = ['blue', 'red', 'green']
@@ -36,12 +37,12 @@ class Interface:
         for k in range(-6, 6):
             for i, c in enumerate(consts):
                 p.draw(line_color=colors[i%3], parametrs={'k': k, 'c': c})
-
+                '''
         p._f._x = x2
         for k in range(-6, 6):
             for i, c in enumerate(consts):
                 p.draw(line_color=colors[i%3], parametrs={'k': k, 'c': c})
-
+                '''
         p.savefig(f'{base_pict_path}{save_file}')
     
     def draw_polar(self, save_file: str):

@@ -22,8 +22,8 @@ class PolarFunction:
         res = np.zeros(len(phi))
 
         for i in range(len(phi)):
-            if not abs(np.cos(phi[i])) < 10**(-6):
-                res[i] = eval(self._right, {}, {self._vars[1]: phi[i], **self._funcs, **parametrs})
+            #if not abs(np.cos(phi[i])) < 10**(-6):
+            res[i] = eval(self._right, {}, {self._vars[1]: phi[i], **self._funcs, **parametrs})
         
         return res
     

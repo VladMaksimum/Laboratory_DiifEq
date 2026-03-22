@@ -16,6 +16,8 @@ class Function:
         var1 = self._vars[0]
         var2 = self._vars[1]
 
+        if len(x) == 1 and len(y) == 1:
+            return eval(self._expr, {}, {var1: x[0], var2: y[0], **self._funcs, **parametrs})
         return eval(self._expr, {}, {var1: x, var2: y, **self._funcs, **parametrs})
     
     def solve_in_ranges(self, parametrs: dict = {}) -> Sequence[Sequence]:
@@ -23,13 +25,13 @@ class Function:
 
         z = self.solve_in_point(X, Y, parametrs)
 
-        
+        '''
         with open("data.txt", 'w') as file:
             for i in range(1, len(self._x)-1):
                 for j in range(1, len(self._y)-1):
                     if abs(self._x[i]) < 0.01:
                         file.write(f'{z[j][i-1]} {z[j][i]} {z[j][i+1]} {self._x[i]=} {self._y[j]}\n')
-        
+        '''
 
         return z
 

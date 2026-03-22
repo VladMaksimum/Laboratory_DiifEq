@@ -84,7 +84,7 @@ class Painter:
                     case 4:
                         self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color, label=f'c={c}')
                     case 5:
-                        if z[co[1]][co[0]] <= 0:
+                        if self._f.solve_in_point([co[1]], [co[0]], parametrs) <= 0:
                             self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color, label=f'c={c}')
                             self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color, label=f'c={c}')
                         else:
@@ -99,7 +99,7 @@ class Painter:
                     case 9:
                         self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color, label=f'c={c}')
                     case 10:
-                        if z[co[1]][co[0]] <= 0:
+                        if self._f.solve_in_point([co[1]], [co[0]], parametrs) <= 0:
                             self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color, label=f'c={c}')
                             self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color, label=f'c={c}')
                         else:
