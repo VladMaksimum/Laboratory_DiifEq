@@ -29,7 +29,7 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
 
     x = np.arange(a, b + step, step)
     y_exact = func_x(x, yx)
-    plt.plot(x, y_exact, color='red')
+    plt.plot(x, y_exact, color='red', label="аналитическое")
     plt.grid()
 
     y_appr = np.zeros(len(x))
@@ -49,9 +49,10 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
         y_appr[i] = runge_kutta(x[i], y_appr[i-1], fxy, h)
         i += 1
 
-    for i in range(0, len(x), int(step / h)):
-        plt.plot(x[i], y_appr[i], 'go', markersize=4)
+    plt.plot([x[i] for i in range(0, len(x), int(step / h))], [y_appr[i] for i in range(0, len(x), int(step / h))],\
+              'go', markersize=4, label="численное")
 
+    plt.legend()
     plt.savefig("Runge-Kutta/graphic.png")
 
     return h, x, y_exact, y_appr

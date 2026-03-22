@@ -46,12 +46,12 @@ epsilon = "0.0001"
 graphic = PhotoImage()
 graph_label = Label()
 
-columns = ("x", "y точное", "y приближ.", "разница")
+columns = ("x", "y точное", "y численное", "разница")
 table = ttk.Treeview(columns=columns, show="headings", height=15)
 
 table.heading("x", text="x")
 table.heading("y точное", text="y точное")
-table.heading("y приближ.", text="y приближ.")
+table.heading("y численное", text="y численное")
 table.heading("разница", text="разница")
 
 
