@@ -10,7 +10,7 @@ def func_xy(x, y, fxy):
 def func_x(x, fx):
     return eval(fx, {}, {'x': x, **funcs})
 
-def runge_kutta(x: float, y: float, fxy: str, h: float):
+def runge_kutta(x: float, y: float, fxy: str, h: float) -> float:
     k1 = func_xy(x, y, fxy)
     k2 = func_xy(x + h / 2, y + h/2 * k1, fxy)
     k3 = func_xy(x + h/2, y + h/2 * k2, fxy)
@@ -38,7 +38,7 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
 
     i = 1
     while i < len(x):
-        if runge_rule(h, x[i], y_appr[i-1], fxy) >= epsilon:
+        if runge_rule(h, x[i-1], y_appr[i-1], fxy) >= epsilon:
             i = 1
             h /= 2
             x = np.arange(a, b+step, h)
@@ -46,12 +46,14 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
             y_appr[0] = y0
             continue
 
-        y_appr[i] = runge_kutta(x[i], y_appr[i-1], fxy, h)
+        y_appr[i] = runge_kutta(x[i-1], y_appr[i-1], fxy, h)
         i += 1
 
     plt.plot([x[i] for i in range(0, len(x), int(step / h))], [y_appr[i] for i in range(0, len(x), int(step / h))],\
               'go', markersize=4, label="численное")
 
+    ax.set_xlabel("Ось X")
+    ax.set_ylabel("Ось Y")
     plt.legend()
     plt.savefig("Runge-Kutta/graphic.png")
 
