@@ -20,11 +20,12 @@ def runge_kutta(x: float, y: float, fxy: str, h: float) -> float:
 
 def runge_rule(h, x, y, fxy):
     yh = runge_kutta(x, y, fxy, h)
-    yh2 = runge_kutta(x, y, fxy, h/2)
+    yh2 = runge_kutta(x + h/2, y, h/2)
 
     return abs(yh2 - yh) / 15
 
 def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
+    #print("start", step)
     fig, ax = plt.subplots()
 
     x = np.arange(a, b + step, step)
@@ -33,21 +34,36 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
     plt.grid()
 
     y_appr = np.zeros(len(x))
+    yh2 = np.zeros(2*len(x))
+    yh2[0] = y0
     y_appr[0] = y0
     h = step
 
     i = 1
     while i < len(x):
-        if runge_rule(h, x[i-1], y_appr[i-1], fxy) >= epsilon:
-            i = 1
-            h /= 2
-            x = np.arange(a, b+step, h)
-            y_appr = np.zeros(len(x))
-            y_appr[0] = y0
-            continue
+        #print(y_appr[i-1], yh2[2*i-2])
 
         y_appr[i] = runge_kutta(x[i-1], y_appr[i-1], fxy, h)
+        yh2[2*i-1] = runge_kutta(x[i-1], yh2[2*i-2], fxy, h/2)
+        yh2[2*i] = runge_kutta(x[i-1] + h/2, yh2[2*i-1], fxy, h/2)
+
+        if abs(y_appr[i] - yh2[2*i]) / 15 >= epsilon:
+            i = 1
+            h /= 2
+            x = np.arange(a, b + h, h)
+            y_appr = np.zeros(len(x))
+            yh2 = np.zeros(2*len(x))
+            yh2[0] = y0
+            y_appr[0] = y0
+
+            continue
+        
+
         i += 1
+    
+    y_appr = yh2
+    h /= 2
+    x = np.arange(a, b + h, h)
 
     plt.plot([x[i] for i in range(0, len(x), int(step / h))], [y_appr[i] for i in range(0, len(x), int(step / h))],\
               'go', markersize=4, label="численное")
@@ -56,5 +72,7 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
     ax.set_ylabel("Ось Y")
     plt.legend()
     plt.savefig("Runge-Kutta/graphic.png")
+
+    #print(h)
 
     return h, x, y_exact, y_appr
