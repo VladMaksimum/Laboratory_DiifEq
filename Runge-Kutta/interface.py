@@ -22,7 +22,7 @@ def update():
     graph_label.place(x=225, y=0)
     
 
-    data = [(f'{float(x[i]):.1f}', str(y_exact[int(i*h / float(step))]), str(y_appr[i]), \
+    data = [(f'{float(x[i]):.3f}', str(y_exact[int(i*h / float(step))]), str(y_appr[i]), \
              str(abs(y_appr[i] - y_exact[int(i*h / float(step))]))) \
             for i in range(0, len(x), int(float(step) / h))]
     

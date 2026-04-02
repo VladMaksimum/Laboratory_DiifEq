@@ -16,30 +16,26 @@ except:
     consts = [float(consts)]
 
 base_pict_path = 'pictures/'
-step = 0.001
+step = 0.01
 buffer = 0.001
 
-x_s, x_e = map(float, input("Input r range: ").split())
-y_s, y_e = map(float, input("Input phi range: ").split())
+x_s, x_e = map(float, input("Input x range: ").split())
+y_s, y_e = map(float, input("Input y range: ").split())
 
 #x1 = np.arange((x_e + x_s) / 2 + buffer, x_e, step)
 #x2 = np.arange(x_s, (x_e + x_s) / 2 - buffer, step)
-phi1 = np.arange(y_s, y_e, step)
-phi2 = np.arange(4.61, 6.28, step)
-r = np.arange(x_s, x_e, step)
+y = np.arange(y_s, y_e, step)
+x = np.arange(x_s, x_e, step)
 
-f = PolarFunction(left, right, ('r', 'phi'), funcs, r, phi1)
-p = PolarPainter(f, step)
+f = Function(left, right, ('x', 'y'), funcs, x, y)
+p = Painter(f, step)
 
 colors = ['blue', 'red', 'green']
 
 
 for i, c in enumerate(consts):
-    p._draw_explicit(line_color=colors[i%3], parametrs={'c': c})
-    p._draw_explicit(line_color=colors[i%3], parametrs={'c': (-c)})
-
-p.draw_line(-np.pi / 4, line_color='purple')
-p.draw_line(np.atan(4), line_color='purple')
+    p.draw(colors[i%3], {'c': c})
+    p.draw(colors[i%3], {'c': (-c)})
 
 
 '''
@@ -50,5 +46,5 @@ for k in range(-6, 6):
         '''
 
 
-p.savefig(f'{base_pict_path}{'test1.png'}')
+p.savefig(f'{base_pict_path}{'test.png'}')
 
