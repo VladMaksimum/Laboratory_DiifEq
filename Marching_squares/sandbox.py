@@ -16,7 +16,7 @@ except:
     consts = [float(consts)]
 
 base_pict_path = 'pictures/'
-step = 0.01
+step = 0.001
 buffer = 0.001
 
 x_s, x_e = map(float, input("Input x range: ").split())
@@ -37,6 +37,9 @@ for i, c in enumerate(consts):
     p.draw(colors[i%3], {'c': c})
     p.draw(colors[i%3], {'c': (-c)})
 
+p._f._expr = 'x + y - 2'
+p.draw()
+
 
 '''
 p._f._x = x2
@@ -46,5 +49,5 @@ for k in range(-6, 6):
         '''
 
 
-p.savefig(f'{base_pict_path}{'test.png'}')
+p.savefig(f'{base_pict_path}{'test2.png'}')
 

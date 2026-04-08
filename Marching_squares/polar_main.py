@@ -16,7 +16,7 @@ except:
     consts = [float(consts)]
 
 base_pict_path = 'pictures/'
-step = 0.0001
+step = 0.01
 buffer = 0.001
 
 x_s, x_e = map(float, input("Input r range: ").split())
@@ -35,8 +35,10 @@ colors = ['blue', 'red', 'green']
 
 
 for i, c in enumerate(consts):
-    p._draw_explicit(line_color=colors[i%3], parametrs={'c': c})
-    #p._draw_explicit(line_color=colors[i%3], parametrs={'c': (-c)})
+    p.draw_implicit(line_color=colors[i%3], parametrs={'c': c})
+    p.draw_implicit(line_color=colors[i%3], parametrs={'c': -c})
+
+
 
 '''p.draw_line(-np.pi / 4, line_color='purple')
 p.draw_line(np.atan(4), line_color='purple')'''
@@ -50,5 +52,5 @@ for k in range(-6, 6):
         '''
 
 
-p.savefig(f'{base_pict_path}{'test1.png'}')
+p.savefig(f'{base_pict_path}{'test2.png'}')
 

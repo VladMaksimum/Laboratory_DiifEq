@@ -9,6 +9,9 @@ def to_cartesian(r: float, phi: float):
 
     return (x, y)
 
+def interpolate(f1, f2):
+    return abs(f1) / (abs(f1) + abs(f2))
+
 
 class PolarPainter:
     def __init__(self, f: PolarFunction, delta: float):
@@ -17,6 +20,7 @@ class PolarPainter:
         self._ax = plt.axes(projection='polar')
         # self._ax.set_yticklabels([])
         self._ax.set_ylim(f._r[0], f._r[-1])
+        self._ax.set_xlim(f._phi[0], f._phi[-1])
         self._ax.set_aspect('equal')
         #plt.axis('equal')
         #plt.grid()
@@ -35,52 +39,52 @@ class PolarPainter:
 
                 sqrt_code = pa * 8 + pb * 4 + pc * 2 + pd * 1
 
-                ca = to_cartesian(self._f._r[j] + self._delta / 2, self._f._phi[i + 1])
-                cb = to_cartesian(self._f._r[j+1], self._f._phi[i] + self._delta / 2)
-                cc = to_cartesian(self._f._r[j] + self._delta / 2, self._f._phi[i])
-                cd = to_cartesian(self._f._r[j], self._f._phi[i] + self._delta / 2)
-                co = to_cartesian(self._f._r[j] + self._delta / 2, self._f._phi[i] + self._delta / 2)
+                ca = (self._f._r[j+1], self._f._phi[i] + self._delta * interpolate(z[i][j+1], z[i+1][j+1]))
+                cb = (self._f._r[j] + self._delta * interpolate(z[i][j], z[i][j+1]), self._f._phi[i])
+                cc = (self._f._r[j], self._f._phi[i] + self._delta *interpolate(z[i][j], z[i][j+1]))
+                cd = (self._f._r[j] + self._delta * interpolate(z[i+1][j], z[i+1][j+1]), self._f._phi[i+1])
+                co = (self._f._r[j] + self._delta / 2, self._f._phi[i] + self._delta / 2)
 
 
                 match sqrt_code:
                     case 1:
-                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        plt.polar([cc[1], cd[1]], [cc[0], cd[0]], line_color)
                     case 2:
-                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        plt.polar([cc[1], cb[1]], [cc[0], cb[0]], line_color)
                     case 3:
-                        self._ax.plot([cb[0], cd[0]], [cb[1], cd[1]], line_color)
+                        plt.polar([cb[1], cd[1]], [cb[0], cd[0]], line_color)
                     case 4:
-                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        plt.polar([ca[1], cb[1]], [ca[0], cb[0]], line_color)
                     case 5:
                         if z[co[1]][co[0]] <= 0:
-                            self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
-                            self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                            plt.polar([cc[1], cd[1]], [cc[0], cd[0]], line_color)
+                            plt.polar([ca[1], cb[1]], [ca[0], cb[0]], line_color)
                         else:
-                            self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
-                            self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                            plt.polar([ca[1], cd[1]], [ca[0], cd[0]], line_color)
+                            plt.polar([cc[1], cb[1]], [cc[0], cb[0]], line_color)
                     case 6:
-                        self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
+                        plt.polar([cc[1], ca[1]], [cc[0], ca[0]], line_color)
                     case 7:
-                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                        plt.polar([ca[1], cd[1]], [ca[0], cd[0]], line_color)
                     case 8:
-                        self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
+                        plt.polar([ca[1], cd[1]], [ca[0], cd[0]], line_color)
                     case 9:
-                        self._ax.plot([cc[0], ca[0]], [cc[1], ca[1]], line_color)
+                        plt.polar([cc[1], ca[1]], [cc[0], ca[0]], line_color)
                     case 10:
                         if z[co[1]][co[0]] <= 0:
-                            self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
-                            self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                            plt.polar([ca[1], cb[1]], [ca[0], cb[0]], line_color)
+                            plt.polar([cc[1], cd[1]], [cc[0], cd[0]], line_color)
                         else:
-                            self._ax.plot([ca[0], cd[0]], [ca[1], cd[1]], line_color)
-                            self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                            plt.polar([ca[1], cd[1]], [ca[0], cd[0]], line_color)
+                            plt.polar([cc[1], cb[1]], [cc[0], cb[0]], line_color)
                     case 11:
-                        self._ax.plot([ca[0], cb[0]], [ca[1], cb[1]], line_color)
+                        plt.polar([ca[1], cb[1]], [ca[0], cb[0]], line_color)
                     case 12:
-                        self._ax.plot([cb[0], cd[0]], [cb[1], cd[1]], line_color)
+                        plt.polar([cb[1], cd[1]], [cb[0], cd[0]], line_color)
                     case 13:
-                        self._ax.plot([cc[0], cb[0]], [cc[1], cb[1]], line_color)
+                        plt.polar([cc[1], cb[1]], [cc[0], cb[0]], line_color)
                     case 14:
-                        self._ax.plot([cc[0], cd[0]], [cc[1], cd[1]], line_color)
+                        plt.polar([cc[1], cd[1]], [cc[0], cd[0]], line_color)
     
     def _draw_explicit(self, line_color: str = 'blue', parametrs: dict = {}):
         z = self._f.solve_explicit(self._f._phi, parametrs)

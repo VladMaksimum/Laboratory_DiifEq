@@ -11,6 +11,12 @@ class Painter:
         self._delta = delta
         self._f = f
         self._fig, self._ax = plt.subplots()
+        #self._fig.set_figheight(abs(f._y[0] - f._y[-1]))
+        #self._fig.set_figwidth(abs(f._x[0] - f._x[-1]))
+        #self._ax.set_xlim(f._x[0], f._x[-1])
+        #self._ax.set_ylim(f._y[0], f._y[-1])
+        self._ax.set_xlabel("Ось X")
+        self._ax.set_ylabel("Ось Y")
         plt.axis('equal')
         plt.grid()
 
