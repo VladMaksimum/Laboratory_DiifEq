@@ -24,6 +24,9 @@ def runge_rule(h, x, y, fxy):
 
     return abs(yh2 - yh) / 15
 
+def euler(h, x, y, fxy):
+    return y + func_xy(x, y, fxy) * h
+
 def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
     #print("start", step)
     fig, ax = plt.subplots()
@@ -76,3 +79,16 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
     #print(h)
 
     return h, x, y_exact, y_appr
+
+if __name__ == '__main__':
+    fxy = 'x + y'
+    h = 0.1
+    x = np.arange(0, 0.4 + h, h)
+    y = np.zeros(len(x))
+    y[0] = 1
+
+    for i in range(1, len(x)):
+        y[i] = euler(h, x[i-1], y[i-1], fxy)
+    
+    for j in range(len(x)):
+        print(f'{j=} {x[j]=} {y[j]=}')
