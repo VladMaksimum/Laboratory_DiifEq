@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-from painter import draw_graphic
+from painter import draw_runge_kutta, draw_euler
+import matplotlib.pyplot as plt
 
 def finish():
     root.destroy()
@@ -15,14 +16,18 @@ def update():
     global dydx, solution, x0, xn, y0, epsilon, graphic#,table
     getData()
 
-    h, x, y_exact, y_appr = draw_graphic(float(x0), float(xn), float(step), float(y0), float(epsilon), dydx, solution)
+    h, x, y_exact, y_appr = draw_runge_kutta(float(x0), float(xn), float(step), float(y0), float(epsilon), dydx, solution)
+    y_euler = draw_euler(float(x0), float(xn), float(step), float(y0), dydx)
+
+    plt.legend()
+    plt.savefig("Runge-Kutta/graphic.png")
 
     graphic = PhotoImage(file="Runge-Kutta/graphic.png")
     graph_label = Label(root, image=graphic)
     graph_label.place(x=225, y=0)
     
 
-    data = [(f'{float(x[i]):.3f}', str(y_exact[int(i*h / float(step))]), str(y_appr[i]), \
+    data = [(f'{float(x[i]):.3f}', str(y_exact[int(i*h / float(step))]), str(y_appr[i]), str(y_euler[int(i*h / float(step))]),\
              str(abs(y_appr[i] - y_exact[int(i*h / float(step))]))) \
             for i in range(0, len(x), int(float(step) / h))]
     
@@ -33,12 +38,12 @@ def update():
     table.place(x=0, y=500)'''
     
 
-    data.insert(0, ("x", "y точное", "y численное", "разница"))
+    data.insert(0, ("x", "y точное", "y численное МРК", "y численное МЭ", "разница"))
 
     for i in range(len(data)):
         for j in range(len(data[0])):
             cell = Label(text=str(data[i][j]), relief='solid')
-            cell.place(x=950 + j*130, y=i*20, width=135, height=25)
+            cell.place(x=875 + j*130, y=i*20, width=135, height=25)
 
 
 

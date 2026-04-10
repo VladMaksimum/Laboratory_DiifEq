@@ -27,7 +27,7 @@ def runge_rule(h, x, y, fxy):
 def euler(h, x, y, fxy):
     return y + func_xy(x, y, fxy) * h
 
-def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
+def draw_runge_kutta(a, b, step, y0, epsilon, fxy, yx):
     #print("start", step)
     fig, ax = plt.subplots()
 
@@ -69,26 +69,23 @@ def draw_graphic(a, b, step, y0, epsilon, fxy, yx):
     x = np.arange(a, b + h, h)
 
     plt.plot([x[i] for i in range(0, len(x), int(step / h))], [y_appr[i] for i in range(0, len(x), int(step / h))],\
-              'go', markersize=4, label="численное")
+              'go', markersize=4, label="численное МРК")
 
     ax.set_xlabel("Ось X")
     ax.set_ylabel("Ось Y")
-    plt.legend()
-    plt.savefig("Runge-Kutta/graphic.png")
 
     #print(h)
 
     return h, x, y_exact, y_appr
 
-if __name__ == '__main__':
-    fxy = 'x + y'
-    h = 0.1
-    x = np.arange(0, 0.4 + h, h)
+def draw_euler(a, b, h, y0, fxy):
+    x = np.arange(a, b + h, h)
     y = np.zeros(len(x))
-    y[0] = 1
+    y[0] = y0
 
     for i in range(1, len(x)):
         y[i] = euler(h, x[i-1], y[i-1], fxy)
     
-    for j in range(len(x)):
-        print(f'{j=} {x[j]=} {y[j]=}')
+    plt.plot([x[i] for i in range(len(x))], [y[i] for i in range(len(x))],'v', markersize=4, label="численное МЭ")
+
+    return y
