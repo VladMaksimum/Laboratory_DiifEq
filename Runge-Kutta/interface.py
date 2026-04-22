@@ -16,8 +16,8 @@ def update():
     global dydx, solution, x0, xn, y0, epsilon, graphic#,table
     getData()
 
-    h, x, y_exact, y_appr = draw_runge_kutta(float(x0), float(xn), float(step), float(y0), float(epsilon), dydx, solution)
-    y_euler = draw_euler(float(x0), float(xn), float(step), float(y0), dydx)
+    h, x, y_exact, y_appr = draw_runge_kutta(float(x0), float(xn), float(step), eval(y0), float(epsilon), dydx, solution)
+    y_euler = draw_euler(float(x0), float(xn), float(step), eval(y0), dydx)
 
     plt.legend()
     plt.savefig("Runge-Kutta/graphic.png")
